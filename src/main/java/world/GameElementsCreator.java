@@ -13,17 +13,17 @@ public class GameElementsCreator implements IBornObservable {
 
   private int energyFactor = 4;
   private List<IBornsObservator> observators = new LinkedList<IBornsObservator>();
-  private UIController uiController;
+  private UIMap uiMap;
   private ShapeAnimalConnector shapeAnimalConnector;
 
-  public GameElementsCreator(UIController uiController, ShapeAnimalConnector shapeAnimalConnector){
-    this.uiController = uiController;
+  public GameElementsCreator(UIMap uiMap, ShapeAnimalConnector shapeAnimalConnector){
+    this.uiMap = uiMap;
     this.shapeAnimalConnector = shapeAnimalConnector;
   }
 
   public GrassUI getGrass(Coordinate coordinate){
-    Rectangle grassShape = uiController.grassShape();
-    GrassUI grass = new GrassUI(grassShape,uiController);
+    Rectangle grassShape = uiMap.grassShape();
+    GrassUI grass = new GrassUI(grassShape, uiMap);
     grass.setPosition(coordinate);
     return grass;
   }
@@ -41,10 +41,10 @@ public class GameElementsCreator implements IBornObservable {
   }
 
   private void addChildUI(Animal child) {
-    Ellipse animalShape = uiController.animalShape();
+    Ellipse animalShape = uiMap.animalShape();
     shapeAnimalConnector.addElement(child,animalShape);
     Coordinate coordinate = child.getCoordinate();
-    AnimalUI animalUI = new AnimalUI(animalShape,uiController);
+    AnimalUI animalUI = new AnimalUI(animalShape, uiMap);
     animalUI.setPosition(coordinate);
     child.addObservator(animalUI);
   }

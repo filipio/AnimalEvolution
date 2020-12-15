@@ -14,7 +14,7 @@ class MapElementTest {
   MapElement mapElement = new MapElement();
   private static int [] genes = new int[32];
   private static Animal [] animals;
-  private UIController uiController = new UIController();
+  private UIMap uiMap = new UIMap();
 
   @BeforeAll
   public static void setGenes(){
@@ -38,7 +38,7 @@ class MapElementTest {
       mapElement.addAnimal(animals[i]);
     }
     Animal.feedEnergy = 40;
-    mapElement.setPlant(new GrassUI(new Rectangle(),uiController));
+    mapElement.setPlant(new GrassUI(new Rectangle(),uiMap));
     for(int i=0; i<animals.length; i++){
       mapElement.feedAnimal(animals[i]);
     }
@@ -48,7 +48,7 @@ class MapElementTest {
     assertEquals(53, animals[4].getEnergy());
 
     Animal animal = new Animal(new Coordinate(0,0),100,new Genotype(genes),Direction.NORTH);
-    mapElement.setPlant(new GrassUI(new Rectangle(),uiController));
+    mapElement.setPlant(new GrassUI(new Rectangle(),uiMap));
     mapElement.addAnimal(animal);
     for(int i=0; i<animals.length; i++){
       assertFalse(mapElement.feedAnimal(animals[i]));

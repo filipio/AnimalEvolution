@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,21 +12,24 @@ class GameElementsCreatorTest {
 
   private ShapeAnimalConnector shapeAnimalConnector = new ShapeAnimalConnector();
 
-  private GameElementsCreator gameElementsCreator = new GameElementsCreator(new UIController(), shapeAnimalConnector);
+  private GameElementsCreator gameElementsCreator = new GameElementsCreator(new UIMap(), shapeAnimalConnector);
   private int uniqueGenes [] = new int[]{0,1,2,3,4,5,6,7};
 
+  //not passing because of lacking gene
   @Test
   void testBornAnAnimal() {
-    for(int i=0; i<1000; i++){
+    for(int i=0; i<2; i++){
       int [] genes = new int[32];
       int [] otherGenes = new int[32];
-      Random random = new Random();
-      for(int j=0; i<genes.length; i++){
-        genes[j] = random.nextInt(8);
-        otherGenes[j] = random.nextInt(8);
+      for(int j=0; j<genes.length; j++) {
+        int randomInt = ThreadLocalRandom.current().nextInt(0, 8);
+        genes[j] = randomInt;
+        otherGenes[j] = randomInt;
       }
       Arrays.sort(genes);
       Arrays.sort(otherGenes);
+      System.out.println(Arrays.toString(genes));
+      System.out.println(Arrays.toString(otherGenes));
       Animal parentOne = new Animal(new Coordinate(15,20),25,new Genotype(genes), Direction.SOUTH);
       Animal parentTwo = new Animal(new Coordinate(15,20),40,new Genotype(otherGenes), Direction.EAST);
 

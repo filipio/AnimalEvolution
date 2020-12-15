@@ -1,19 +1,16 @@
 package world;
 
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
-import java.awt.*;
 
 public class GrassUI implements IElementUI {
 
   private Rectangle rectangle;
-  private UIController uiController;
+  private UIMap uiMap;
 
-  public GrassUI(Rectangle rectangle, UIController uiController){
+  public GrassUI(Rectangle rectangle, UIMap uiMap){
     this.rectangle = rectangle;
-    this.uiController = uiController;
+    this.uiMap = uiMap;
   }
 
   @Override
@@ -26,6 +23,6 @@ public class GrassUI implements IElementUI {
 
   @Override
   public void disappear() {
-    uiController.removeGrass(this.rectangle);
+    uiMap.removeGrass(this.rectangle);
   }
 }

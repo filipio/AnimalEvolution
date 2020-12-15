@@ -18,10 +18,10 @@ class GameMapTest {
   public static MapElement [] values = new MapElement[9];
  public static Territory [] territories = new Territory[2];
   public static int[] genes = new int[32];
-  private UIController uiController = new UIController();
+  private UIMap uiMap = new UIMap();
   private ShapeAnimalConnector  shapeAnimalConnector = new ShapeAnimalConnector();
 
-  GameElementsCreator gameElementsCreator = new GameElementsCreator(new UIController(), shapeAnimalConnector);
+  GameElementsCreator gameElementsCreator = new GameElementsCreator(new UIMap(), shapeAnimalConnector);
   GameMap gameMap;
   @BeforeAll
   public static void createGenes(){
@@ -119,8 +119,8 @@ class GameMapTest {
     gameMap.addAnimal(animalTwo);
     gameMap.addAnimal(animalThree);
 
-    values[0].setPlant(new GrassUI(new Rectangle(), uiController));
-    values[1].setPlant(new GrassUI(new Rectangle(),uiController));
+    values[0].setPlant(new GrassUI(new Rectangle(), uiMap));
+    values[1].setPlant(new GrassUI(new Rectangle(), uiMap));
 
     assertEquals(0,gameMap.tryFeedAnimal(animalOne));
     assertEquals(1,gameMap.tryFeedAnimal(animalTwo));

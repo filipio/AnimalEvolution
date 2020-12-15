@@ -5,11 +5,11 @@ import javafx.scene.shape.Ellipse;
 public class AnimalUI implements ILivingElementUI {
 
   private Ellipse ellipse;
-  private UIController uiController;
+  private UIMap uiMap;
 
-  public AnimalUI(Ellipse ellipse, UIController uiController){
+  public AnimalUI(Ellipse ellipse, UIMap uiMap){
     this.ellipse = ellipse;
-    this.uiController = uiController;
+    this.uiMap = uiMap;
   }
 
   @Override
@@ -22,7 +22,7 @@ public class AnimalUI implements ILivingElementUI {
 
   @Override
   public void disappear() {
-    this.uiController.removeAnimal(ellipse);
+    this.uiMap.removeAnimal(ellipse);
   }
 
   @Override

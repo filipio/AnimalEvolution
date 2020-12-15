@@ -28,7 +28,7 @@ public class UIMap{
   private GridPane grassPane = new GridPane();
   private BorderPane mainPane = new BorderPane();
   private Pane centerPane = new Pane();
-  private Stage stage = new Stage();
+  private Stage stage;
 
   private int vBoxWidth = 100;
 
@@ -41,7 +41,11 @@ public class UIMap{
   private int grassCounter = 0;
   private Animal lastClickedAnimal;
 
-  private ShapeAnimalConnector shapeAnimalConnector;
+  private ShapeAnimalConnector shapeAnimalConnector = new ShapeAnimalConnector();
+
+  public boolean isRunning(){
+    return !uiData.isStopped;
+  }
 
   private EventHandler<MouseEvent> animalClicked = new EventHandler<MouseEvent>() {
     @Override
@@ -55,19 +59,22 @@ public class UIMap{
     }
   };
 
-  public UIMap(){
-    stage.setTitle("Animal world");
-    mainPane.setCenter(centerPane);
-    centerPane.getChildren().addAll(animalPane,grassPane);
-    centerPane.setStyle("-fx-background-color: " + GameColor.GRASS.color);
-    animalPane.toFront();
-    uiData = new UIData();
-    bottomPanel = new BottomPanel(uiData);
-    leftPanel = new LeftPanel(bottomPanel,uiData);
-    mainPane.setBottom(bottomPanel.createPanel());
-    mainPane.setLeft(leftPanel.createPanel(100,100));
-    Scene scene = new Scene(this.mainPane,widthInPixels,heightInPixels,Color.GREEN);
-    stage.setScene(scene);
+
+  public void initializeMap(){
+    if(stage != null){
+      stage.setTitle("Animal world");
+      mainPane.setCenter(centerPane);
+      centerPane.getChildren().addAll(animalPane,grassPane);
+      centerPane.setStyle("-fx-background-color: " + GameColor.GRASS.color);
+      animalPane.toFront();
+      uiData = new UIData();
+      bottomPanel = new BottomPanel(uiData);
+      leftPanel = new LeftPanel(bottomPanel,uiData);
+      mainPane.setBottom(bottomPanel.createPanel());
+      mainPane.setLeft(leftPanel.createPanel(100,100));
+      Scene scene = new Scene(this.mainPane,widthInPixels,heightInPixels,Color.GREEN);
+      stage.setScene(scene);
+    }
   }
 
   public Stage getStage(){
@@ -116,4 +123,37 @@ public class UIMap{
   }
 
 
+  public ShapeAnimalConnector getAnimalConnector() {
+    return this.shapeAnimalConnector;
+  }
+
+  public void updateData(AnimalsData animalsData) {
+    if(!uiData.isStopped){
+      if(uiData.isChasingHistory){
+        if(uiData.historyCounter == uiData.daysToChase){
+          uiData.isStopped = true;
+          uiData.isChasingHistory = false;
+          bottomPanel.showAnimalData(lastClickedAnimal);
+          return; // display data
+          // get the
+        }
+        uiData.historyCounter++;
+      }
+
+      leftPanel.setAnimalsCount(animalsCounter);
+      leftPanel.setGrassCount(grassCounter);
+      leftPanel.setAvgEnergy(animalsData.averageEnergy);
+      leftPanel.setAvgChildrenCount(animalsData.averageChildrenCount);
+      leftPanel.setAvgLengthForDead(animalsData.averageLifeLengthForDead);
+      bottomPanel.setDominantGenotype(animalsData.dominantGenotype);
+    }
+    else if(uiData.shouldShowDominantAnimals){
+      showDominantAnimals();
+      uiData.shouldShowDominantAnimals = false;
+    }
+  }
+
+  public void setStage(Stage stage) {
+    this.stage = stage;
+  }
 }
