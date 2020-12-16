@@ -5,7 +5,6 @@ public class UIData {
   public int historyCounter = 0;
   public boolean isChasingHistory = false;
   public boolean isStopped = false;
-  public boolean shouldShowDominantAnimals;
 
   public void resetCounter(){
     this.historyCounter = 0;

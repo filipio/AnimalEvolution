@@ -59,6 +59,19 @@ public class UIMap{
     }
   };
 
+  private EventHandler<MouseEvent> dominantGenotypeClicked = new EventHandler<MouseEvent>() {
+    @Override
+    public void handle(MouseEvent mouseEvent) {
+      if(uiData.isStopped){
+        Genotype dominantGenotype = bottomPanel.getDominantGenotype();
+        for(Shape shape : shapeAnimalConnector.getDominantShapes(dominantGenotype)){
+          shape.setFill(Color.RED);
+        }
+      }
+
+    }
+  };
+
 
   public void initializeMap(){
     if(stage != null){
@@ -68,7 +81,7 @@ public class UIMap{
       centerPane.setStyle("-fx-background-color: " + GameColor.GRASS.color);
       animalPane.toFront();
       uiData = new UIData();
-      bottomPanel = new BottomPanel(uiData);
+      bottomPanel = new BottomPanel(uiData,dominantGenotypeClicked);
       leftPanel = new LeftPanel(bottomPanel,uiData);
       mainPane.setBottom(bottomPanel.createPanel());
       mainPane.setLeft(leftPanel.createPanel(100,100));
@@ -82,12 +95,6 @@ public class UIMap{
   }
 
 
-  public void showDominantAnimals(){
-    Genotype dominantGenotype = bottomPanel.getDominantGenotype();
-    for(Shape shape : shapeAnimalConnector.getDominantShapes(dominantGenotype)){
-      shape.setFill(Color.RED);
-    }
-  }
 
 
   public Rectangle grassShape(){
@@ -146,10 +153,6 @@ public class UIMap{
       leftPanel.setAvgChildrenCount(animalsData.averageChildrenCount);
       leftPanel.setAvgLengthForDead(animalsData.averageLifeLengthForDead);
       bottomPanel.setDominantGenotype(animalsData.dominantGenotype);
-    }
-    else if(uiData.shouldShowDominantAnimals){
-      showDominantAnimals();
-      uiData.shouldShowDominantAnimals = false;
     }
   }
 

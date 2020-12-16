@@ -2,20 +2,47 @@ package world;
 
 import javafx.application.Platform;
 import javafx.scene.shape.Ellipse;
-import org.checkerframework.checker.guieffect.qual.UI;
-
 import java.util.Arrays;
-import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.*;
 
 public class Simulator {
 
-  private boolean initialized = false;
+  private class SimulationTask extends TimerTask{
 
+    private DaySimulator daySimulator;
+    private ActionsExecutor actionsExecutor;
+    private UIMap uiMap;
+
+    public SimulationTask(DaySimulator daySimulator, ActionsExecutor actionsExecutor, UIMap uiMap) {
+      this.daySimulator = daySimulator;
+      this.actionsExecutor = actionsExecutor;
+      this.uiMap = uiMap;
+    }
+    public void run(){
+      Platform.runLater(new Runnable() {
+        @Override
+        public void run() {
+//          System.out.println("running in Simulation task thread");
+          if(uiMap.isRunning()){
+            daySimulator.simulateADay();
+            AnimalsData animalsData = actionsExecutor.animalsData();
+            uiMap.updateData(animalsData);
+          }
+        }
+      });
+    }
+  }
+
+  private UIMap uiMap;
+
+
+  public Simulator(UIMap uiMap){
+    this.uiMap = uiMap;
+  }
 
   public void initialze() {
-    System.out.println("running in a new thread!");
+    System.out.println("running in a initialize method");
     Animal.startEnergy=50;
     ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     Coordinate.MAX_Y = 30;
@@ -50,66 +77,42 @@ public class Simulator {
       System.out.print(genes[i] + " ");
     }
 
-    //managers
-    UIController uiController = new UIController();
-    uiController.setMapsCount(5);
-    executorService.scheduleAtFixedRate(new Runnable() {
-      public void run(){
-        Platform.runLater(new Runnable() {
-          @Override
-          public void run() {
-            System.out.println("running in simulator thread");
-            DaySimulator daySimulator = null;
-            ActionsExecutor actionsExecutor = null;
-            UIMap uiMap = null;
 
-            if(!initialized){
-              initialized = true;
-              uiController.launcher();
-              System.out.println("line below UIController launcher");
-              List<UIMap> maps = uiController.getMaps();
-              uiMap = maps.get(0);
-              ShapeAnimalConnector shapeAnimalConnector = uiMap.getAnimalConnector();
-              GameElementsCreator gameElementsCreator = new GameElementsCreator(uiMap, shapeAnimalConnector); // to change
-              Territory [] territories = new Territory[2];
-              territories[0] = territoryDesert;
-              territories[1] = territoryJungle;
-              GameMap gameMap = new GameMap(coordinates,mapElements,territories,gameElementsCreator);
-              actionsExecutor = new ActionsExecutor(gameMap, shapeAnimalConnector);
-              gameElementsCreator.addObserver(actionsExecutor);
-              daySimulator = new DaySimulator(actionsExecutor);
 
-              //animals
-              int numberOfAnimals = 25;
-              Animal [] animals = new Animal[numberOfAnimals];
-              for(int i=0; i<5; i++) {
-                for(int j=0; j<5; j++){
-                  animals[i* 5 + j] = new Animal(new Coordinate( i,j ),Animal.startEnergy,new Genotype(genes),Direction.SOUTH);
-                  actionsExecutor.onAnimalBorn(animals[i * 5 + j]);
-                  Ellipse animalShape = uiMap.animalShape();
-                  AnimalUI animalUI = new AnimalUI(animalShape,uiMap);
-                  animalUI.setPosition(new Coordinate(i,j));
-                  shapeAnimalConnector.addElement(animals[i*5 + j],animalShape);
-                  animals[i*5+j].addObservator(animalUI);
-                }
-              }
+    ShapeAnimalConnector shapeAnimalConnector = uiMap.getAnimalConnector();
+    GameElementsCreator gameElementsCreator = new GameElementsCreator(uiMap, shapeAnimalConnector); // to change
+    Territory [] territories = new Territory[2];
+    territories[0] = territoryDesert;
+    territories[1] = territoryJungle;
+    GameMap gameMap = new GameMap(coordinates,mapElements,territories,gameElementsCreator);
+    ActionsExecutor actionsExecutor = new ActionsExecutor(gameMap, shapeAnimalConnector);
+    gameElementsCreator.addObserver(actionsExecutor);
+    DaySimulator daySimulator = new DaySimulator(actionsExecutor);
 
-              int plantsCount = 100;
-              for(int i=0; i<plantsCount/2; i++) {
-                gameMap.plantPlants();
-              }
-            }
-
-            daySimulator.simulateADay();
-            AnimalsData animalsData = actionsExecutor.animalsData();
-            uiMap.updateData(animalsData);
-          }
-        });
+    //animals
+    int numberOfAnimals = 25;
+    Animal [] animals = new Animal[numberOfAnimals];
+    for(int i=0; i<5; i++) {
+      for(int j=0; j<5; j++){
+        animals[i* 5 + j] = new Animal(new Coordinate( i,j ),Animal.startEnergy,new Genotype(genes),Direction.SOUTH);
+        actionsExecutor.onAnimalBorn(animals[i * 5 + j]);
+        Ellipse animalShape = uiMap.animalShape();
+        AnimalUI animalUI = new AnimalUI(animalShape,uiMap);
+        animalUI.setPosition(new Coordinate(i,j));
+        shapeAnimalConnector.addElement(animals[i*5 + j],animalShape);
+        animals[i*5+j].addObservator(animalUI);
       }
-    },0,100, TimeUnit.MILLISECONDS);
+    }
 
+    int plantsCount = 100;
+    for(int i=0; i<plantsCount/2; i++) {
+      gameMap.plantPlants();
+    }
 
+    System.out.println("after initialization of objects");
 
+    SimulationTask simulationTask = new SimulationTask(daySimulator,actionsExecutor,uiMap);
+    executorService.scheduleAtFixedRate(simulationTask,100,100,TimeUnit.MILLISECONDS);
 
 
   }

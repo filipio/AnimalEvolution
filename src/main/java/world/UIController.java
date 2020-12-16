@@ -8,39 +8,22 @@ import java.util.List;
 
 public class UIController extends Application{
 
-  private List<UIMap> maps = new ArrayList<UIMap>();
-  private int mapsCount=1;
-
-  public UIController(){
-  }
-
-  public void setMapsCount(int mapsCount){
-    this.mapsCount = mapsCount;
-  }
+  private int mapsCount=2;
+  private UIMap[] maps = new UIMap[mapsCount];
 
   @Override
   public void start(Stage primaryStage) {
-    System.out.println("in main thread : " + this);
     System.out.println("calling start method!");
     System.out.println(mapsCount);
-      for(int i=0; i<mapsCount; i++){
+      for(int i=0; i<maps.length; i++){
+        System.out.println("iteration nr " + i);
         Stage stage = new Stage();
-        UIMap uiMap = new UIMap();
-        uiMap.setStage(stage);
-        uiMap.initializeMap();
-        maps.add(uiMap);
-      }
-      for(UIMap map : maps){
-        map.getStage().show();
+        maps[i] = new UIMap();
+        maps[i].setStage(stage);
+        maps[i].initializeMap();
+        Simulator simulator = new Simulator(maps[i]);
+        simulator.initialze();
+        stage.show();
       }
     }
-
-
-    public void launcher(){
-    Application.launch();
-    }
-
-  public List<UIMap> getMaps() {
-    return this.maps;
-  }
 }

@@ -23,8 +23,8 @@ public class ShapeAnimalConnector {
     shapeAnimalMap.put(key,value);
   }
 
-  public List<Shape> getDominantShapes(Genotype dominantGenotype){
-    List<Shape> dominantShapes = new LinkedList<>();
+  public List<Ellipse> getDominantShapes(Genotype dominantGenotype){
+    List<Ellipse> dominantShapes = new LinkedList<>();
     for(Animal animal : shapeAnimalMap.keySet()){
       if(animal.getGenotype().equals(dominantGenotype)){
         dominantShapes.add(shapeAnimalMap.get(animal));

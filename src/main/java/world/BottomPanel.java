@@ -26,14 +26,16 @@ public class BottomPanel {
   private Button chaseHistoryButton;
   private UIData uiData;
   private Genotype dominantGenotype;
+  private EventHandler<MouseEvent> dominantGenotypeClicked;
 
   public Genotype getDominantGenotype() {
     return dominantGenotype;
   }
 
 
-  public BottomPanel(UIData uiData){
+  public BottomPanel(UIData uiData, EventHandler<MouseEvent> dominantGenotypeClicked){
     this.uiData = uiData;
+    this.dominantGenotypeClicked = dominantGenotypeClicked;
   }
 
   public HBox createPanel(){
@@ -49,15 +51,7 @@ public class BottomPanel {
       hBox.getChildren().add(texts[i]);
       texts[i].setVisible(false);
     }
-
-    texts[index.DOMINANT_GENOTYPE.ordinal()].addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent mouseEvent) {
-        System.out.println("show animals with dominant genotype");
-        uiData.shouldShowDominantAnimals = true;
-      }
-    });
-
+    texts[index.DOMINANT_GENOTYPE.ordinal()].addEventHandler(MouseEvent.MOUSE_CLICKED,dominantGenotypeClicked);
     int numbersInInput = 9;
     UnaryOperator<TextFormatter.Change> filter = change -> {
 
@@ -80,14 +74,7 @@ public class BottomPanel {
     };
     TextFormatter<String> textFormatter = new TextFormatter<>(filter);
 
-
-
-
     input = new TextField();
-
-
-
-
     input.setTextFormatter(textFormatter);
     input.setMaxWidth(90);
     input.setVisible(false);
@@ -95,7 +82,6 @@ public class BottomPanel {
 
     chaseHistoryButton = new Button();
     chaseHistoryButton.setText("chase history");
-
     chaseHistoryButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {
@@ -133,6 +119,7 @@ public class BottomPanel {
     hideData();
     int children = animal.children();
     int descendants = animal.descendants();
+    animal.resetDescendants();
     Integer deadTime = animal.getDeadTime();
 
     texts[index.CHILDREN.ordinal()].setText("Your animals has now : " + Integer.toString(children) + " childrens,");
