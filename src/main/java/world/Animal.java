@@ -5,11 +5,11 @@ import java.util.LinkedList;
 
 public class Animal implements IAnimalObservable {
 
-  public static int feedEnergy=20;
-  public static int startEnergy=80;
+  public static int feedEnergy;
+  public static int startEnergy;
+  public static int moveEnergy;
 
 //needs to be changed later on
-  private int moveEnergy = -5;
   private int initialEnergy;
   private Coordinate coordinate;
   private final Genotype genotype;

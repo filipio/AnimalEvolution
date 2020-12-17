@@ -15,6 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.checkerframework.checker.guieffect.qual.UI;
 
+import javax.xml.crypto.Data;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.*;
 
@@ -29,6 +31,7 @@ public class UIMap{
   private BorderPane mainPane = new BorderPane();
   private Pane centerPane = new Pane();
   private Stage stage;
+  private DataSave dataSave = new DataSave();
 
   private int vBoxWidth = 100;
 
@@ -72,6 +75,19 @@ public class UIMap{
     }
   };
 
+  private EventHandler<MouseEvent> saveClicked = new EventHandler<MouseEvent>() {
+    @Override
+    public void handle(MouseEvent mouseEvent) {
+      System.out.println("saving");
+      int enteredInput = leftPanel.getInputValue();
+      try{
+        dataSave.saveDataToFile(enteredInput,"save.txt");
+      }
+      catch (IllegalArgumentException | IOException e){
+        e.printStackTrace();
+      }
+    }
+  };
 
   public void initializeMap(){
     if(stage != null){
@@ -82,7 +98,7 @@ public class UIMap{
       animalPane.toFront();
       uiData = new UIData();
       bottomPanel = new BottomPanel(uiData,dominantGenotypeClicked);
-      leftPanel = new LeftPanel(bottomPanel,uiData);
+      leftPanel = new LeftPanel(bottomPanel,uiData,saveClicked);
       mainPane.setBottom(bottomPanel.createPanel());
       mainPane.setLeft(leftPanel.createPanel(100,100));
       Scene scene = new Scene(this.mainPane,widthInPixels,heightInPixels,Color.GREEN);
@@ -93,9 +109,6 @@ public class UIMap{
   public Stage getStage(){
     return this.stage;
   }
-
-
-
 
   public Rectangle grassShape(){
     Rectangle rectangle = new Rectangle();
@@ -146,12 +159,10 @@ public class UIMap{
         }
         uiData.historyCounter++;
       }
-
-      leftPanel.setAnimalsCount(animalsCounter);
-      leftPanel.setGrassCount(grassCounter);
-      leftPanel.setAvgEnergy(animalsData.averageEnergy);
-      leftPanel.setAvgChildrenCount(animalsData.averageChildrenCount);
-      leftPanel.setAvgLengthForDead(animalsData.averageLifeLengthForDead);
+      DataContainer data  = new DataContainer(animalsCounter,grassCounter,
+              animalsData.averageEnergy,animalsData.averageLifeLengthForDead,animalsData.averageChildrenCount);
+      dataSave.addNewData(data);
+      leftPanel.setData(data);
       bottomPanel.setDominantGenotype(animalsData.dominantGenotype);
     }
   }

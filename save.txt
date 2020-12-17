@@ -1,0 +1,5 @@
+animals : 31
+grass : 61
+animals avg energy : 20
+ life length for dead : 2
+avg childrenCount : 0 

@@ -4,12 +4,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
-import java.util.function.UnaryOperator;
+
 
 public class BottomPanel {
 
@@ -27,6 +26,7 @@ public class BottomPanel {
   private UIData uiData;
   private Genotype dominantGenotype;
   private EventHandler<MouseEvent> dominantGenotypeClicked;
+  private NumberInput numberInput = new NumberInput();
 
   public Genotype getDominantGenotype() {
     return dominantGenotype;
@@ -52,32 +52,7 @@ public class BottomPanel {
       texts[i].setVisible(false);
     }
     texts[index.DOMINANT_GENOTYPE.ordinal()].addEventHandler(MouseEvent.MOUSE_CLICKED,dominantGenotypeClicked);
-    int numbersInInput = 9;
-    UnaryOperator<TextFormatter.Change> filter = change -> {
-
-      if (change.isContentChange()) {
-        int newLength = change.getControlNewText().length();
-        if (newLength > numbersInInput) {
-          String tail = change.getControlNewText().substring(newLength - numbersInInput, newLength);
-          change.setText(tail);
-          int oldLength = change.getControlText().length();
-          change.setRange(0, oldLength);
-        }
-      }
-
-      String text = change.getText();
-      if (text.matches("[0-9]*")) {
-        return change;
-      }
-
-      return null;
-    };
-    TextFormatter<String> textFormatter = new TextFormatter<>(filter);
-
-    input = new TextField();
-    input.setTextFormatter(textFormatter);
-    input.setMaxWidth(90);
-    input.setVisible(false);
+    input = numberInput.getInputField(9,false);
     hBox.getChildren().add(input);
 
     chaseHistoryButton = new Button();
@@ -138,7 +113,10 @@ public class BottomPanel {
       texts[index.DOMINANT_GENOTYPE.ordinal()].setVisible(true);
       texts[index.DOMINANT_GENOTYPE.ordinal()].setText(genotype.toString());
     }
-
+    else{
+      texts[index.DOMINANT_GENOTYPE.ordinal()].setVisible(true);
+      texts[index.DOMINANT_GENOTYPE.ordinal()].setText("");
+    }
   }
 }
 

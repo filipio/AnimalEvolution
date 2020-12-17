@@ -1,8 +1,10 @@
 package world;
 
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -11,13 +13,32 @@ import javafx.scene.text.Text;
 
 public class LeftPanel {
 
+  private enum TextIndex{
+    ANIMALS(1),
+    GRASS(3),
+    AVG_ENERGY(5),
+    AVG_CHILDREN(7),
+    AVG_LIFE_LENGTH(9);
+
+    public int index;
+
+    private TextIndex(int index){
+      this.index = index;
+    }
+  }
+
   private Text[] data;
   private BottomPanel bottomPanel;
   private UIData uiData;
+  private EventHandler<MouseEvent> saveClicked;
+  private TextField input;
+  private NumberInput numberInput  = new NumberInput();
 
-  public LeftPanel(BottomPanel bottomPanel, UIData uiData){
+
+  public LeftPanel(BottomPanel bottomPanel, UIData uiData, EventHandler<MouseEvent> saveClicked){
     this.bottomPanel = bottomPanel;
     this.uiData = uiData;
+    this.saveClicked = saveClicked;
   }
 
   public VBox createPanel(int prefWidth, int maxWidth){
@@ -33,7 +54,8 @@ public class LeftPanel {
 
     Button buttons[] = new Button[] {
             new Button("Pause"),
-            new Button("Resume"),};
+            new Button("Resume"),
+            new Button("Save")};
 
     data = new Text[]{
             new Text("animals :"),
@@ -51,20 +73,30 @@ public class LeftPanel {
       @Override
       public void handle(MouseEvent mouseEvent) {
         uiData.isStopped = true;
+        buttons[2].setVisible(true);
+        input.setVisible(true);
       }
     });
     buttons[1].addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {
         uiData.isStopped = false;
+        buttons[2].setVisible(false);
+        input.setVisible(false);
+        input.setText("");
         bottomPanel.hideData();
       }
     });
+
+    buttons[2].addEventHandler(MouseEvent.MOUSE_CLICKED,saveClicked);
+    buttons[2].setVisible(false);
 
     for (int i=0; i< buttons.length; i++) {
       VBox.setMargin(buttons[i], new Insets(0, 0, 0, 8));
       vbox.getChildren().add(buttons[i]);
     }
+    input = numberInput.getInputField(9,false);
+    vbox.getChildren().add(input);
 
     for (int i=0; i< data.length; i++) {
       data[i].maxWidth(100);
@@ -76,26 +108,18 @@ public class LeftPanel {
     return vbox;
   }
 
-  public void setAnimalsCount(int count){
-    this.data[1].setText(Integer.toString(count));
+
+  public void setData(DataContainer data) {
+    int [] dataAsArray = data.asArray();
+    int index = 0;
+    for(TextIndex textIndex : TextIndex.values()){
+      this.data[textIndex.index].setText(Integer.toString(dataAsArray[index]));
+      index++;
+    }
   }
 
-  public void setGrassCount(int count){
-    this.data[3].setText(Integer.toString(count));
+  public int getInputValue(){
+    return Integer.parseInt(input.getText());
   }
-
-  public void setAvgEnergy(int avgEnergy){
-    this.data[5].setText(Integer.toString(avgEnergy));
-  }
-
-  public void setAvgChildrenCount(int count){
-    this.data[7].setText(Integer.toString(count));
-  }
-
-  public void setAvgLengthForDead(int avgLength){
-    this.data[9].setText(Integer.toString(avgLength));
-  }
-
-
 
 }
