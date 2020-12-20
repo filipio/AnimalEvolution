@@ -3,7 +3,6 @@ package world;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class GenotypesController {
 
@@ -18,7 +17,6 @@ public class GenotypesController {
       value = 1;
     }
     genotypeMap.put(genotype,value);
-    //how to keep values in map in some order ?
   }
   public Genotype getDominantGenotype() throws NoSuchElementException{
     if(genotypeMap.isEmpty()){
@@ -31,7 +29,6 @@ public class GenotypesController {
           return genotype;
         }
       }
-      System.out.println("returning null in genotypes Controller");
       return null;
     }
 

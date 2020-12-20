@@ -2,7 +2,6 @@ package world;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 public class GameMap {
 
@@ -28,11 +27,8 @@ public class GameMap {
   public void removeAnimal(Animal animal) {
     MapElement modifiedMapElement = map.get(animal.getCoordinate());
     modifiedMapElement.removeAnimal(animal);
-    // looks a little bit weird, becuase we have 2 methods with the same name - removeAnimal
   }
 
-  //also we will need to call some method in other class to create a visual plant
-// on a specific place
   public int plantPlants() {
     int plantedCounter = 0;
     for (int i = 0; i < territories.length; i++) {
@@ -49,7 +45,7 @@ public class GameMap {
           break;
         } else {
           checkedCoordinates.add(randomCoordinate);
-          if (checkedCoordinates.size() == territories[i].size()) {//we checked all possible places for plants
+          if (checkedCoordinates.size() == territories[i].size()) {
             break;
           }
         }
@@ -62,7 +58,6 @@ public class GameMap {
     return !elementToBePlanted.isOccupied() && !elementToBePlanted.isPlanted();
   }
 
-  // this int doesn't make any sense probably, but for tests it's okay
   public int tryBornAnimals(List<Coordinate> coordinates) {
     HashSet<Coordinate> checkedCoordinates = new HashSet<>();
     int bornedAnimals = 0;
@@ -88,7 +83,7 @@ public class GameMap {
     }
     return false;
   }
-// feeding animals is connected with removing grass
+
   public int tryFeedAnimal(Animal animal){
     return map.get(animal.getCoordinate()).feedAnimal(animal) ? 1 : 0;
   }
@@ -117,15 +112,3 @@ public class GameMap {
   }
 
 }
-// all public methods except adding/removing animal should be teste
-
-
-// two options :
-// 1) check planted places
-// 2) check places where are animals
-// Which is better? hard to say, every time we got 2 more plants,
-// at worst case we got the same amount of plants as animals -- seems to be worse
-// there will be a problem with checking whether animal can still eat or not
-// we could do this with creating a list of animals to be fed and check whether there are still any animals
-// GameMap could return the amount of energy that an animal gets
-//

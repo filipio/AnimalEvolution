@@ -1,6 +1,5 @@
 package world;
 
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -14,9 +13,6 @@ import javafx.scene.text.Text;
 public class LeftPanel {
 
 
-  public void errorMessage(String message) {
-    errorText.setText(message);
-  }
 
   private enum TextIndex{
     ANIMALS(1),
@@ -35,7 +31,6 @@ public class LeftPanel {
 
 
   private Text[] data;
-  private Text errorText = new Text();
   private BottomPanel bottomPanel;
   private UIData uiData;
   private EventHandler<MouseEvent> saveClicked;
@@ -114,10 +109,6 @@ public class LeftPanel {
       VBox.setMargin(data[i], new Insets(0, 0, 0, 8));
       vbox.getChildren().add(data[i]);
     }
-    errorText.maxWidth(100);
-    errorText.minWidth(100);
-    errorText.prefWidth(100);
-    vbox.getChildren().add(errorText);
     vbox.setStyle("-fx-background-color: " + GameColor.PANEL.color + ";");
     return vbox;
   }

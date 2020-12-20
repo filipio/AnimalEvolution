@@ -3,9 +3,6 @@ package world;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Shape;
-
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 

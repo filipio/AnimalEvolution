@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 
-public class UIController extends Application{
+public class SimulationLauncher extends Application{
 
   private int mapsCount=2;
   private UIMap[] maps = new UIMap[mapsCount];

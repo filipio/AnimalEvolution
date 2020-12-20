@@ -1,7 +1,6 @@
 package world;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,7 +35,6 @@ public class MapElement {
   }
 
   public boolean feedAnimal(Animal animal){
-    // dziala w zalozeniu o to, że w momencie gdy odpalamy metode animalsWereModifed, tzn. poruszyły się -- kijowo
     if(isPlanted()){
       if(animalsWereModified){
         findAnimalsToBeFed();

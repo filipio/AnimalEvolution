@@ -5,27 +5,6 @@ public class DataContainer {
   private int grassCount;
   private int avgAnimalsEnergy;
   private int avgLifeLengthForDead;
-
-  public int getAnimalsCount() {
-    return animalsCount;
-  }
-
-  public int getGrassCount() {
-    return grassCount;
-  }
-
-  public int getAvgAnimalsEnergy() {
-    return avgAnimalsEnergy;
-  }
-
-  public int getAvgLifeLengthForDead() {
-    return avgLifeLengthForDead;
-  }
-
-  public int getAvgChildrenCount() {
-    return avgChildrenCount;
-  }
-
   private int avgChildrenCount;
 
   public DataContainer(int animalsCount, int grassCount, int avgAnimalsEnergy, int avgLifeLengthForDead, int avgChildrenCount) {
