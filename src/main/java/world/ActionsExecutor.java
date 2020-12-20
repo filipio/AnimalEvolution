@@ -7,7 +7,6 @@ public class ActionsExecutor implements IBornsObservator {
 
   private LinkedList<Animal> livingAnimals = new LinkedList<Animal>();
   private GameMap gameMap;
-  //maybe needs refactoring later on
   private int currDay = 0;
   private int totalLifeLengthForDead = 0;
   private int deadAnimals = 0;

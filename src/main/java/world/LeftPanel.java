@@ -13,6 +13,11 @@ import javafx.scene.text.Text;
 
 public class LeftPanel {
 
+
+  public void errorMessage(String message) {
+    errorText.setText(message);
+  }
+
   private enum TextIndex{
     ANIMALS(1),
     GRASS(3),
@@ -27,7 +32,10 @@ public class LeftPanel {
     }
   }
 
+
+
   private Text[] data;
+  private Text errorText = new Text();
   private BottomPanel bottomPanel;
   private UIData uiData;
   private EventHandler<MouseEvent> saveClicked;
@@ -40,6 +48,8 @@ public class LeftPanel {
     this.uiData = uiData;
     this.saveClicked = saveClicked;
   }
+
+
 
   public VBox createPanel(int prefWidth, int maxWidth){
     VBox vbox = new VBox();
@@ -67,7 +77,7 @@ public class LeftPanel {
             new Text("avg\nchildren : "),
             new Text(""),
             new Text("avg length\nfor dead : "),
-            new Text("")
+            new Text(""),
     };
     buttons[0].addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
       @Override
@@ -104,9 +114,15 @@ public class LeftPanel {
       VBox.setMargin(data[i], new Insets(0, 0, 0, 8));
       vbox.getChildren().add(data[i]);
     }
+    errorText.maxWidth(100);
+    errorText.minWidth(100);
+    errorText.prefWidth(100);
+    vbox.getChildren().add(errorText);
     vbox.setStyle("-fx-background-color: " + GameColor.PANEL.color + ";");
     return vbox;
   }
+
+
 
 
   public void setData(DataContainer data) {

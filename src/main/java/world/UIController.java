@@ -11,10 +11,7 @@ public class UIController extends Application{
 
   @Override
   public void start(Stage primaryStage) {
-    System.out.println("calling start method!");
-    System.out.println(mapsCount);
       for(int i=0; i<maps.length; i++){
-        System.out.println("iteration nr " + i);
         Stage stage = new Stage();
         maps[i] = new UIMap();
         maps[i].setStage(stage);

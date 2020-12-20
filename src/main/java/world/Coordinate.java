@@ -15,10 +15,6 @@ public class Coordinate {
     this.y = y;
   }
   public Coordinate add(Coordinate coordinate){
-    // dlatego nowy element bo GameMap bedzie potrzebowal sprawdzac gdzie moze sie pojawić urodzone dziecko
-    // bedziesz szukal wszystkich wolnych wspołrzędnych dodajac kolejne coordinate zwiazane z Directions
-    // potem losowal jednego z nich dla dziecka
-    //jesli nie bedzie wolnego, wylosujesz jakis losowy zajty
     return new Coordinate((this.x + coordinate.x + MAX_X) % MAX_X, (this.y + coordinate.y + MAX_Y) % MAX_Y);
   }
 

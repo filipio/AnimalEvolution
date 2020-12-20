@@ -78,13 +78,12 @@ public class UIMap{
   private EventHandler<MouseEvent> saveClicked = new EventHandler<MouseEvent>() {
     @Override
     public void handle(MouseEvent mouseEvent) {
-      System.out.println("saving");
       int enteredInput = leftPanel.getInputValue();
       try{
         dataSave.saveDataToFile(enteredInput,"save.txt");
       }
       catch (IllegalArgumentException | IOException e){
-        e.printStackTrace();
+        bottomPanel.errorMessage(e.getMessage());
       }
     }
   };

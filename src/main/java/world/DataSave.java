@@ -30,7 +30,13 @@ public class DataSave {
       DataContainer nextData = (DataContainer) iter.next();
       data.add(nextData);
     }
-    data.averageData(daysCount);
+    try{
+      data.averageData(daysCount);
+    }
+    catch (ArithmeticException e){
+      throw new IllegalArgumentException("Cannot calculate after 0 days.");
+    }
+
     try{
       BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
       writer.write(data.toString());

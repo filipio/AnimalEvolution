@@ -23,7 +23,6 @@ public class Simulator {
       Platform.runLater(new Runnable() {
         @Override
         public void run() {
-//          System.out.println("running in Simulation task thread");
           if(uiMap.isRunning()){
             daySimulator.simulateADay();
             AnimalsData animalsData = actionsExecutor.animalsData();
@@ -42,7 +41,6 @@ public class Simulator {
   }
 
   public void initialze() {
-    System.out.println("running in a initialize method");
     IStartDataProvider startDataProvider = new StartDataProvider();
     StartData startData = startDataProvider.getStartData();
     Animal.startEnergy=startData.getStartEnergy();
@@ -76,7 +74,6 @@ public class Simulator {
     Coordinate [] desert =  Arrays.stream(coordinates).filter
             (t -> !Arrays.stream(jungleCoordinates)
                     .anyMatch(g -> g.equals(t))).toArray(Coordinate[]::new);
-    System.out.println("desert[0] : "  + desert[0]);
 
     Territory territoryDesert = new Territory(desert);
     Territory territoryJungle = new Territory(jungleCoordinates);
@@ -134,7 +131,6 @@ public class Simulator {
       gameMap.plantPlants();
     }
 
-    System.out.println("after initialization of objects");
 
     SimulationTask simulationTask = new SimulationTask(daySimulator,actionsExecutor,uiMap);
     executorService.scheduleAtFixedRate(simulationTask,100,100,TimeUnit.MILLISECONDS);

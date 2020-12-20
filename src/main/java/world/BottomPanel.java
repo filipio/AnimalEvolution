@@ -12,6 +12,11 @@ import javafx.scene.text.Text;
 
 public class BottomPanel {
 
+  public void errorMessage(String message) {
+    hideData();
+    errorText.setText(message);
+  }
+
   private enum index{
     GENOTYPE,
     CHILDREN,
@@ -22,6 +27,7 @@ public class BottomPanel {
 
   private Text [] texts = new Text[5];
   private TextField input;
+  private Text errorText = new Text();
   private Button chaseHistoryButton;
   private UIData uiData;
   private Genotype dominantGenotype;
@@ -69,7 +75,7 @@ public class BottomPanel {
     });
     hBox.getChildren().add(chaseHistoryButton);
     chaseHistoryButton.setVisible(false);
-
+    hBox.getChildren().add(errorText);
     return hBox;
   }
 
@@ -77,6 +83,7 @@ public class BottomPanel {
     input.setVisible(false);
     chaseHistoryButton.setVisible(false);
     input.setText("");
+    errorText.setText("");
     for(int i=0; i< texts.length; i++){
       texts[i].setText("");
     }
