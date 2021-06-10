@@ -99,6 +99,14 @@ public class Animal implements IAnimalObservable {
     notifyObservators();
   }
 
+  @Override
+  public void notifyObservators() {
+    for(ILivingElementUI observator : observators){
+      observator.setPosition(this.coordinate);
+      observator.updateData(energyPercent());
+    }
+  }
+
   public boolean checkDeath() {
     if(this.energy<=0) {
       onDeath();
@@ -113,13 +121,7 @@ public class Animal implements IAnimalObservable {
     }
   }
 
-  @Override
-  public void notifyObservators() {
-    for(ILivingElementUI observator : observators){
-      observator.setPosition(this.coordinate);
-      observator.updateData(energyPercent());
-    }
-  }
+
 
   public String toString(){
     return genotype.toString();
